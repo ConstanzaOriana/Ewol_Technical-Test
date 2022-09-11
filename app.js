@@ -1,6 +1,6 @@
-let minutes = 00;
-let seconds = 00;
-let tens = 00;
+let minutes = 0;
+let seconds = 0;
+let tens = 0;
 let outputMinutes = document.getElementById("minutes");
 let outputSeconds = document.getElementById("seconds");
 let outputTens = document.getElementById("tens");
@@ -12,8 +12,13 @@ let buttonReset = document.getElementById("btn-reset");
 let Interval;
 
 const toPositive = (timeUnit) => {
-    aux = timeUnit;
-    aux -= aux * 2;
+    if(timeUnit < 0){
+        aux = timeUnit;
+        aux -= aux * 2;
+    }
+    else{
+        aux = timeUnit;
+    }
     return aux;
 };
 
@@ -26,16 +31,8 @@ const resetValues = () => {
     outputMinutes.innerHTML = "0" + 0;
 };
 
-const mainEvaluator = (signal="increase") => {
-
-    if(signal === "increase"){
-        tens++;
-    }
-    else if(signal === "decrease"){
-        tens--;
-        buttonStopWatch.disabled = true;
-        buttonTimer.disabled = true;
-    }
+/*
+const digitsEvaluator = (tens, seconds, minutes) => {
 
     let prefix = "";
     let prefix2 = "";
@@ -60,6 +57,116 @@ const mainEvaluator = (signal="increase") => {
         prefix = "-0";
         prefix2 = "-";
         tensValue = toPositive(tens);
+        increase = false;
+
+    }
+    else if(tens === 0){
+        tens = 0;
+        outputTens.innerHTML = "0" + 0;
+    }
+
+    // Code to evaluate double digit
+
+    if(tensValue <= 9){
+        outputTens.innerHTML = prefix + tensValue;
+        console.log("A");
+    }
+    if(tensValue > 9){
+        outputTens.innerHTML = prefix2 + tensValue;
+        console.log("B");
+    }
+    if(tensValue > 99){
+        tens = 0;
+        outputTens.innerHTML = "0" + 0;
+        if(increase){
+            seconds++;
+            secondsValue = seconds;
+        }
+        else{
+            seconds--;
+            secondsValue = toPositive(seconds);
+        }
+        outputSeconds.innerHTML = prefix + secondsValue;
+        console.log("C");
+    }
+    if(secondsValue > 9){
+        outputSeconds.innerHTML = prefix2 + secondsValue;
+        console.log("D");
+    }
+    if(secondsValue > 59){
+        seconds = 0;
+        outputSeconds.innerHTML = "0" + 0;
+        if(increase){
+            minutes++;
+            minutesValue = minutes;
+        }
+        else{
+            minutes--;
+            minutesValue = toPositive(minutes);
+        }
+        outputMinutes.innerHTML = prefix + minutesValue;
+        console.log("E");
+    }
+    if(minutesValue > 9){
+        outputMinutes.innerHTML = prefix2 + minutesValue;
+        console.log("F");
+    }
+    if(minutesValue > 59){
+        resetValues();
+        console.log("G");
+    }
+    return [tens, seconds, minutes]
+};*/
+
+const mainEvaluator = (signal="increase") => {
+
+    if(signal === "increase"){
+        tens++;
+    }
+    else if(signal === "decrease"){
+        tens--;
+        buttonStopWatch.disabled = true;
+        buttonTimer.disabled = true;
+    }
+
+    /*
+    console.log(tens);
+    
+    asd = [];
+
+    asd = digitsEvaluator(tens, seconds, minutes);
+
+    asd[0] = tens;
+    console.log(`${asd[0]} ASKFSHADLKJGHSDLKGFHASDLKFHSA`);
+    asd[1] = seconds;
+    asd[2] = minutes;
+    */
+
+
+    let prefix = "";
+    let prefix2 = "";
+    let tensValue = "";
+    let secondsValue = "";
+    let minutesValue = "";
+    let increase = true;
+
+    // Code to evaluate positive, negative or zero digits
+
+    if(tens > 0){
+
+        prefix = "0";
+        prefix2 = "";
+        tensValue = tens;
+        secondsValue = seconds;
+        minutesValue = minutes;
+
+    }
+    else if(tens < 0){
+
+        prefix = "-0";
+        prefix2 = "-";
+        tensValue = toPositive(tens);
+        increase = false;
 
     }
     else if(tens === 0){
@@ -128,6 +235,9 @@ buttonDecrease.addEventListener('click', () => {
 });
 
 let round = "";
+let auxMinutes = minutes;
+let auxSeconds = seconds;
+let auxTens = tens;
 
 buttonStopWatch.addEventListener('click', () => {
     if(buttonStopWatch.textContent === "Iniciar cronometro"){
@@ -142,8 +252,17 @@ buttonStopWatch.addEventListener('click', () => {
         console.log(round);
         round.addEventListener('click', () => {
             let li = document.createElement("li");
-            li.innerHTML = `${minutes}:${seconds}:${tens}`;
+            li.innerHTML = `${minutes}:${seconds}:${tens} - Diferencia con ronda previa: ${toPositive(minutes-auxMinutes)}:${toPositive(seconds-auxSeconds)}:${toPositive(tens-auxTens)}`;
+            li.classList.add("li");
             document.body.appendChild(li);
+            auxMinutes = minutes;
+            auxSeconds = seconds;
+            auxTens = tens;
+            let input = document.createElement("input");
+            input.type = "text";
+            input.innerHTML = "Ingrese nombre de ronda";
+            input.classList.add("input");
+            document.body.appendChild(input);
         });
     }
     else{
@@ -159,7 +278,7 @@ buttonTimer.addEventListener('click', () => {
             clearInterval(Interval);
             Interval = setInterval(mainEvaluator, 10, "decrease");
         }
-        // No fuinciona revisar
+        // No funciona revisar
         else if(tens === 0 && seconds === 0 && minutes === 0){
             clearInterval(Interval);
             resetValues();
@@ -172,10 +291,11 @@ buttonTimer.addEventListener('click', () => {
 
 
 buttonReset.addEventListener('click', () => {
+    buttonStopWatch.textContent = "Iniciar cronometro";
     clearInterval(Interval);
     resetValues();
     buttonStopWatch.disabled = false;
     buttonTimer.disabled = false;
-    
+       
 });
 

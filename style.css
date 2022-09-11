@@ -1,0 +1,12 @@
+.li{
+    list-style: decimal;
+}
+
+.input{
+    display: block;
+}
+
+
+.input:hover{
+    display: block;
+}
