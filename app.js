@@ -1,6 +1,7 @@
 let minutes = 0;
 let seconds = 0;
 let tens = 0;
+let containerDiv = document.getElementById("container");
 let outputMinutes = document.getElementById("minutes");
 let outputSeconds = document.getElementById("seconds");
 let outputTens = document.getElementById("tens");
@@ -118,15 +119,13 @@ const digitsEvaluator = (tens, seconds, minutes) => {
     return [tens, seconds, minutes]
 };*/
 
-const mainEvaluator = (signal="increase") => {
+const mainEvaluator = (signal) => {
 
     if(signal === "increase"){
         tens++;
     }
     else if(signal === "decrease"){
         tens--;
-        buttonStopWatch.disabled = true;
-        buttonTimer.disabled = true;
     }
 
     /*
@@ -153,25 +152,28 @@ const mainEvaluator = (signal="increase") => {
     // Code to evaluate positive, negative or zero digits
 
     if(tens > 0){
-
         prefix = "0";
         prefix2 = "";
         tensValue = tens;
         secondsValue = seconds;
         minutesValue = minutes;
-
+        increase = true;
+        buttonStopWatch.disabled = false;
+        buttonTimer.disabled = false;
     }
     else if(tens < 0){
-
         prefix = "-0";
         prefix2 = "-";
         tensValue = toPositive(tens);
         increase = false;
-
+        buttonStopWatch.disabled = true;
+        buttonTimer.disabled = true;
     }
     else if(tens === 0){
-        tens = 0;
-        outputTens.innerHTML = "0" + 0;
+        prefix = "0";
+        tensValue = tens;
+        buttonStopWatch.disabled = false;
+        buttonTimer.disabled = false;
     }
 
     // Code to evaluate double digit
@@ -226,59 +228,83 @@ const mainEvaluator = (signal="increase") => {
     }
 };
 
-buttonIncrease.addEventListener('click', mainEvaluator);
+buttonIncrease.addEventListener('click', () => {
+    mainEvaluator("increase");
+});
 
 buttonDecrease.addEventListener('click', () => {
     mainEvaluator("decrease");
 });
 
-let round = "";
-let input = "";
-let auxMinutes = minutes;
-let auxSeconds = seconds;
-let auxTens = tens;
-
 buttonStopWatch.addEventListener('click', () => {
     if(buttonStopWatch.textContent === "Iniciar cronometro"){
         buttonStopWatch.textContent = "Detener cronometro";
         clearInterval(Interval);
-        Interval = setInterval(mainEvaluator, 10);
-        if(round === ""){
-            round = document.createElement("button");
-            round.textContent = "Marcar vuelta";    
-            document.body.appendChild(round);
-            
-        }
-        console.log(round);
-        round.addEventListener('click', () => {
-            let li = document.createElement("li");
-            li.innerHTML = `${minutes}:${seconds}:${tens} - Diferencia con ronda previa: ${toPositive(minutes-auxMinutes)}:${toPositive(seconds-auxSeconds)}:${toPositive(tens-auxTens)}`;
-            li.classList.add("li");
-            document.body.appendChild(li);
-            auxMinutes = minutes;
-            auxSeconds = seconds;
-            auxTens = tens;
-            if(input === ""){
-            li.addEventListener('mouseenter', () => {
-                let input = document.createElement("input");
-                input.type = "text";
-                input.innerHTML = "Ingrese nombre de ronda";
-                input.classList.add("input");
-                document.body.appendChild(input);   
-            })
-            let deleteRound = document.createElement("button");
-            deleteRound.textContent = "Eliminar vuelta";
-            document.body.appendChild(deleteRound);
-            deleteRound.addEventListener('click', () => {
-                li.style.display = "none";
-            })
-        }
-    });
+        Interval = setInterval(mainEvaluator, 10, "increase");
+        round.style.display = "inline-block";
     }
     else{
         buttonStopWatch.textContent = "Iniciar cronometro";
+        round.style.display = "none";
         clearInterval(Interval);
     }
+});
+
+let input = "";
+let count = 0;
+let auxMinutes = "";
+let auxSeconds = "";
+let auxTens = "";
+
+let round = document.createElement("button");
+round.textContent = "Marcar vuelta";    
+containerDiv.append(round);
+round.style.display = "none";
+
+round.addEventListener('click', () => {
+    console.log("Estoy ejecutando esta mierda");
+    let div = document.createElement("div");
+    div.classList.add("div-round");
+    document.body.append(div);
+
+    let deleteRound = document.createElement("button");
+    deleteRound.textContent = "Eliminar vuelta";
+    deleteRound.classList.add("mx-5");
+    div.append(deleteRound);
+    deleteRound.addEventListener('click', () => {
+        div.style.display = "none";
+    });
+
+    count++;
+
+    if(count === 1){
+        auxMinutes = minutes;
+        auxSeconds = seconds;
+        auxTens = tens;
+    }
+
+    let li = document.createElement("li");
+    li.innerHTML = `Nro. ${count} // ${minutes}:${seconds}:${tens} // Diferencia: ${toPositive(minutes-auxMinutes)}:${toPositive(seconds-auxSeconds)}:${toPositive(tens-auxTens)}`;
+
+    li.classList.add("li");
+    li.classList.add("mx-5");
+    div.append(li);
+    auxMinutes = minutes;
+    auxSeconds = seconds;
+    auxTens = tens;
+
+    li.addEventListener('mouseenter', () => {
+        console.log(input);
+        if(input === ""){
+            input = document.createElement("input");
+            input.type = "text";
+            input.classList.add("input");
+            input.classList.add("mx-5");
+            div.append(input);
+            console.log(input);
+        }
+    });
+
 });
 
 buttonTimer.addEventListener('click', () => {
@@ -303,6 +329,7 @@ buttonTimer.addEventListener('click', () => {
 
 buttonReset.addEventListener('click', () => {
     buttonStopWatch.textContent = "Iniciar cronometro";
+    buttonTimer.textContent = "Iniciar temporizador";
     clearInterval(Interval);
     resetValues();
     buttonStopWatch.disabled = false;
