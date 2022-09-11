@@ -6,8 +6,8 @@ let outputSeconds = document.getElementById("seconds");
 let outputTens = document.getElementById("tens");
 let buttonIncrease = document.getElementById("btn-increase");
 let buttonDecrease = document.getElementById("btn-decrease");
-let buttonStart = document.getElementById("btn-stopwatch");
-let buttonStop = document.getElementById("btn-stop");
+let buttonStopWatch = document.getElementById("btn-stopwatch");
+let buttonTimer = document.getElementById("btn-timer");
 let buttonReset = document.getElementById("btn-reset");
 let Interval;
 
@@ -17,15 +17,24 @@ const toPositive = (timeUnit) => {
     return aux;
 };
 
+const resetValues = () => {
+    tens = 0;
+    outputTens.innerHTML = "0" + 0;
+    seconds = 0;
+    outputSeconds.innerHTML = "0" + 0;
+    minutes = 0;
+    outputMinutes.innerHTML = "0" + 0;
+};
+
 const mainEvaluator = (signal="increase") => {
 
     if(signal === "increase"){
         tens++;
-        buttonStart.disabled = false;
     }
     else if(signal === "decrease"){
         tens--;
-        buttonStart.disabled = true;
+        buttonStopWatch.disabled = true;
+        buttonTimer.disabled = true;
     }
 
     let prefix = "";
@@ -35,13 +44,12 @@ const mainEvaluator = (signal="increase") => {
     let minutesValue = "";
     let increase = true;
 
-    ///////////////////////////////////////////////////
+    // Code to evaluate positive, negative or zero digits
 
     if(tens > 0){
 
         prefix = "0";
         prefix2 = "";
-
         tensValue = tens;
         secondsValue = seconds;
         minutesValue = minutes;
@@ -51,17 +59,15 @@ const mainEvaluator = (signal="increase") => {
 
         prefix = "-0";
         prefix2 = "-";
-
         tensValue = toPositive(tens);
-        //secondsValue = toPositive(seconds);
-        //minutesValue = toPositive(minutes);
 
     }
     else if(tens === 0){
-        outputTens.innerHTML = "0" + tens;
+        tens = 0;
+        outputTens.innerHTML = "0" + 0;
     }
 
-    ///////////////////////////////////////////////////
+    // Code to evaluate double digit
 
     if(tensValue <= 9){
         outputTens.innerHTML = prefix + tensValue;
@@ -72,7 +78,7 @@ const mainEvaluator = (signal="increase") => {
         console.log("B");
     }
     if(tensValue > 99){
-        tens = 00;
+        tens = 0;
         outputTens.innerHTML = "0" + 0;
         if(increase){
             seconds++;
@@ -90,7 +96,7 @@ const mainEvaluator = (signal="increase") => {
         console.log("D");
     }
     if(secondsValue > 59){
-        seconds = 00;
+        seconds = 0;
         outputSeconds.innerHTML = "0" + 0;
         if(increase){
             minutes++;
@@ -108,44 +114,9 @@ const mainEvaluator = (signal="increase") => {
         console.log("F");
     }
     if(minutesValue > 59){
-        tens = 00;
-        outputTens.innerHTML = "0" + 0;
-        seconds = 00;
-        outputSeconds.innerHTML = "0" + 0;
-        minutes = 00;
-        outputMinutes.innerHTML = "0" + 0;
+        resetValues();
         console.log("G");
     }
-        
-    /*if(tens < 0){
-
-        prefix = "-0";
-        prefix2 = "-";
-
-        tensPositive = toPositive(tens);
-        secondsPositive = toPositive(seconds);
-        minutesPositive = toPositive(minutes);
-
-        if(tensPositive <= 9){
-            outputTens.innerHTML = prefix + tensPositive;
-        }
-        if(tensPositive > 9){
-            outputTens.innerHTML = prefix2 + tensPositive;
-        }
-        if(tensPositive > 99){
-            tens = 00;
-            outputTens.innerHTML = tens;
-            seconds--;
-            outputSeconds.innerHTML = prefix + secondsPositive;
-        }
-
-
-    }
-
-    if(tens === 0){
-        outputTens.innerHTML = "0" + tens;
-    }*/
-
 };
 
 buttonIncrease.addEventListener('click', () => {
@@ -156,32 +127,55 @@ buttonDecrease.addEventListener('click', () => {
     mainEvaluator("decrease");
 });
 
-clickCount = 0;
+let round = "";
 
-buttonStart.addEventListener('click', () => {
-    i = 0
-    clearInterval(Interval);
-    Interval = setInterval(mainEvaluator, 10);
-    buttonStart.innerHTML = "Detener cronometro";
-if (buttonStart.innerHTML === "Detener cronometro") {
-    buttonStart.addEventListener('click', () => {
-        i++
+buttonStopWatch.addEventListener('click', () => {
+    if(buttonStopWatch.textContent === "Iniciar cronometro"){
+        buttonStopWatch.textContent = "Detener cronometro";
         clearInterval(Interval);
-    })
-;} 
+        Interval = setInterval(mainEvaluator, 10);
+        if(round === ""){
+            round = document.createElement("button");
+            round.textContent = "Marcar vuelta";    
+            document.body.appendChild(round);
+        }
+        console.log(round);
+        round.addEventListener('click', () => {
+            let li = document.createElement("li");
+            li.innerHTML = `${minutes}:${seconds}:${tens}`;
+            document.body.appendChild(li);
+        });
+    }
+    else{
+        buttonStopWatch.textContent = "Iniciar cronometro";
+        clearInterval(Interval);
+    }
 });
 
-// buttonStop.addEventListener('click', () => {
-//     clearInterval(Interval);
-// });
+buttonTimer.addEventListener('click', () => {
+    if(buttonTimer.textContent === "Iniciar temporizador"){
+        buttonTimer.textContent = "Detener temporizador";
+        if(tens > 0){
+            clearInterval(Interval);
+            Interval = setInterval(mainEvaluator, 10, "decrease");
+        }
+        // No fuinciona revisar
+        else if(tens === 0 && seconds === 0 && minutes === 0){
+            clearInterval(Interval);
+            resetValues();
+        }
+    }
+    else{
+        buttonTimer.textContent = "Iniciar temporizador";
+    } 
+});
+
 
 buttonReset.addEventListener('click', () => {
     clearInterval(Interval);
-    tens = "00";
-    seconds = "00";
-    minutes = "00";
-    outputMinutes.innerHTML = minutes;
-    outputSeconds.innerHTML = seconds;
-    outputTens.innerHTML = tens;
+    resetValues();
+    buttonStopWatch.disabled = false;
+    buttonTimer.disabled = false;
+    
 });
 
