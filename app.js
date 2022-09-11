@@ -6,7 +6,7 @@ let outputSeconds = document.getElementById("seconds");
 let outputTens = document.getElementById("tens");
 let buttonIncrease = document.getElementById("btn-increase");
 let buttonDecrease = document.getElementById("btn-decrease");
-let buttonStart = document.getElementById("btn-start");
+let buttonStart = document.getElementById("btn-stopwatch");
 let buttonStop = document.getElementById("btn-stop");
 let buttonReset = document.getElementById("btn-reset");
 let Interval;
@@ -21,9 +21,11 @@ const mainEvaluator = (signal="increase") => {
 
     if(signal === "increase"){
         tens++;
+        buttonStart.disabled = false;
     }
     else if(signal === "decrease"){
         tens--;
+        buttonStart.disabled = true;
     }
 
     let prefix = "";
@@ -154,14 +156,24 @@ buttonDecrease.addEventListener('click', () => {
     mainEvaluator("decrease");
 });
 
+clickCount = 0;
+
 buttonStart.addEventListener('click', () => {
+    i = 0
     clearInterval(Interval);
     Interval = setInterval(mainEvaluator, 10);
+    buttonStart.innerHTML = "Detener cronometro";
+if (buttonStart.innerHTML === "Detener cronometro") {
+    buttonStart.addEventListener('click', () => {
+        i++
+        clearInterval(Interval);
+    })
+;} 
 });
 
-buttonStop.addEventListener('click', () => {
-    clearInterval(Interval);
-});
+// buttonStop.addEventListener('click', () => {
+//     clearInterval(Interval);
+// });
 
 buttonReset.addEventListener('click', () => {
     clearInterval(Interval);
