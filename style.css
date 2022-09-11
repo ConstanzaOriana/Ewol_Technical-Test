@@ -1,12 +1,13 @@
 .li{
+    display: flex;
+    justify-content: center;
     list-style: decimal;
+    margin-top: 5%;
+    width: 30%;
 }
 
-.input{
-    display: block;
-}
-
-
-.input:hover{
-    display: block;
+.input{    
+    display: inline-flex;
+    justify-content: center;
+    width: 30%;
 }

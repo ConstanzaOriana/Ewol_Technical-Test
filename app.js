@@ -226,15 +226,14 @@ const mainEvaluator = (signal="increase") => {
     }
 };
 
-buttonIncrease.addEventListener('click', () => {
-    mainEvaluator();
-});
+buttonIncrease.addEventListener('click', mainEvaluator);
 
 buttonDecrease.addEventListener('click', () => {
     mainEvaluator("decrease");
 });
 
 let round = "";
+let input = "";
 let auxMinutes = minutes;
 let auxSeconds = seconds;
 let auxTens = tens;
@@ -248,6 +247,7 @@ buttonStopWatch.addEventListener('click', () => {
             round = document.createElement("button");
             round.textContent = "Marcar vuelta";    
             document.body.appendChild(round);
+            
         }
         console.log(round);
         round.addEventListener('click', () => {
@@ -258,12 +258,22 @@ buttonStopWatch.addEventListener('click', () => {
             auxMinutes = minutes;
             auxSeconds = seconds;
             auxTens = tens;
-            let input = document.createElement("input");
-            input.type = "text";
-            input.innerHTML = "Ingrese nombre de ronda";
-            input.classList.add("input");
-            document.body.appendChild(input);
-        });
+            if(input === ""){
+            li.addEventListener('mouseenter', () => {
+                let input = document.createElement("input");
+                input.type = "text";
+                input.innerHTML = "Ingrese nombre de ronda";
+                input.classList.add("input");
+                document.body.appendChild(input);   
+            })
+            let deleteRound = document.createElement("button");
+            deleteRound.textContent = "Eliminar vuelta";
+            document.body.appendChild(deleteRound);
+            deleteRound.addEventListener('click', () => {
+                li.style.display = "none";
+            })
+        }
+    });
     }
     else{
         buttonStopWatch.textContent = "Iniciar cronometro";
@@ -274,12 +284,13 @@ buttonStopWatch.addEventListener('click', () => {
 buttonTimer.addEventListener('click', () => {
     if(buttonTimer.textContent === "Iniciar temporizador"){
         buttonTimer.textContent = "Detener temporizador";
+
         if(tens > 0){
             clearInterval(Interval);
             Interval = setInterval(mainEvaluator, 10, "decrease");
         }
         // No funciona revisar
-        else if(tens === 0 && seconds === 0 && minutes === 0){
+        else if(tens === 00 && seconds === 00 && minutes === 00){
             clearInterval(Interval);
             resetValues();
         }
@@ -296,6 +307,5 @@ buttonReset.addEventListener('click', () => {
     resetValues();
     buttonStopWatch.disabled = false;
     buttonTimer.disabled = false;
-       
 });
 
