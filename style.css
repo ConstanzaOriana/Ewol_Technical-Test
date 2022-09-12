@@ -13,31 +13,40 @@ h1{
     text-align: center;
 }
 
-p{
+#counter-mode-button, #time-mode-button{
     display: flex;
+    justify-content: center;
+    font-family: sans-serif;
+    color: purple;
+    border: none;
+    font-size: x-large;
+    margin: 2%;
+    padding: 2%;
+    border-radius: 5%; 
+}
+
+#counter-mode-button, #time-mode-button{
+    display: flex;
+    background-color: rgb(199, 119, 221);
+    transition: 0.5s;
+    color: aliceblue;
+}
+
+#counter-mode{
+    display: none;
+}
+
+#time-mode{
+    display: none;
+    
+    /* display: flex;
     justify-content: center;
     margin-top: 5%;
     color: aliceblue;
     font-size: 300%;
-    font-family: sans-serif;
+    font-family: sans-serif; */
 }
 
-button{
-background-color: aliceblue;
-font-family: sans-serif;
-color: purple;
-border: none;
-font-size: x-large;
-margin: 2%;
-padding: 2%;
-border-radius: 5%;
-}
-
-button:hover{
-background-color: rgb(199, 119, 221);
-transition: 0.5s;
-color: aliceblue;
-}
 
 .li{
     list-style: none;
