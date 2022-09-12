@@ -24,6 +24,8 @@ modeCounter.addEventListener('click', () => {
     timeCounter.style.color = "aliceblue";
     timeCounter.style.fontSize = "300%";
     timeCounter.style.fontFamily = "sans-serif";
+    let timeMode = document.getElementById('time-mode');
+    timeMode.style.display = "none";
 
     let contador = 0;
 
@@ -56,6 +58,9 @@ modeTime.addEventListener('click', () => {
     timeMode.style.color = "aliceblue";
     timeMode.style.fontSize = "300%";
     timeMode.style.fontFamily = "sans-serif";
+    let timeCounter = document.getElementById('counter-mode');
+    timeCounter.style.display = "none";
+    
    
 
     const toPositive = (timeUnit) => {
