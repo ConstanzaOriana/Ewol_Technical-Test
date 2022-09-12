@@ -1,3 +1,4 @@
+let body = document.getElementById("body");
 let modeCounter = document.getElementById("counter-mode-button");
 let modeTime = document.getElementById("time-mode-button");
 let minutes = 0;
@@ -19,11 +20,12 @@ let Interval;
 
 modeCounter.addEventListener('click', () => {
     let timeCounter = document.getElementById('counter-mode');
-    timeCounter.style.display = "flex";
+    timeCounter.style.display = "inline-flex";
     timeCounter.style.justifyContent = "center";
     timeCounter.style.color = "aliceblue";
     timeCounter.style.fontSize = "300%";
     timeCounter.style.fontFamily = "sans-serif";
+    timeCounter.style.margin = "3%";
     let timeMode = document.getElementById('time-mode');
     timeMode.style.display = "none";
 
@@ -53,7 +55,7 @@ modeCounter.addEventListener('click', () => {
 
 modeTime.addEventListener('click', () => {
     let timeMode = document.getElementById('time-mode');
-    timeMode.style.display = "flex";
+    timeMode.style.display = "inline-flex";
     timeMode.style.justifyContent = "center";
     timeMode.style.color = "aliceblue";
     timeMode.style.fontSize = "300%";

@@ -8,9 +8,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-96x96.png">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="body">
     <div id="container">
         <h1>Ewol - Technical Test</h1>
+        <div id="counter-mode-button"><input type="radio" name="options">Modo contador</input></div> 
+        <div id="time-mode-button"><input type="radio" name="options">Modo tiempo</input></div>
         <div id="counter-mode">
            <span id="valor">0</span>
            <button class="boton disminuir">Disminuir</button>
@@ -25,8 +27,6 @@
         <button id="btn-timer" class="btn-time">Iniciar temporizador</button>
         <button id="btn-reset" class="btn-time">Reset</button>
         </div>
-        <div id="counter-mode-button"><input type="radio" name="options">Modo contador</input></div> 
-        <div id="time-mode-button"><input type="radio" name="options">Modo tiempo</input></div>
     </div>
     <script src="app.js"></script>
 </body> 

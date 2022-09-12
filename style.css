@@ -14,21 +14,18 @@ h1{
 }
 
 #counter-mode-button, #time-mode-button{
+    width: 20%;
     display: flex;
     justify-content: center;
     font-family: sans-serif;
-    color: purple;
     border: none;
     font-size: x-large;
-    margin: 2%;
-    padding: 2%;
+    margin-left: 2%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding: 1%;
     border-radius: 5%; 
-}
-
-#counter-mode-button, #time-mode-button{
-    display: flex;
     background-color: rgb(199, 119, 221);
-    transition: 0.5s;
     color: aliceblue;
 }
 
