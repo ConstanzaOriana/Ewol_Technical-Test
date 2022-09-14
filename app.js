@@ -36,10 +36,17 @@ const editDigits = (digitsToEdit) => {
             inputEdit.id = "inputDigits";
             inputEdit.setAttribute("value", numbers);
             inputEdit.type = "number";
-            inputEdit.setAttribute("min", 1);
-            inputEdit.setAttribute("max", 0);
+            inputEdit.setAttribute("maxlength", 2);
             digitsToEdit.append(inputEdit);
         }
+
+        document.querySelectorAll('input[type ="number"]').forEach(input => {
+            input.oninput = () => {
+                if(input.value.length > input.maxLength){
+                    input.value = input.value.slice(0, input.maxLength);
+                }
+            };
+        });
     
         let inputDigits = document.getElementById("inputDigits");
     
