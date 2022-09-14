@@ -20,6 +20,56 @@ let Interval;
 
 html.style.background = "linear-gradient(to bottom, rgb(217, 18, 217), rgb(214, 52, 214), purple)";
 
+// Code that allows to edit the digits
+
+let flagValue = false;
+let inputEdit = "";
+let numbers = "";
+
+const editDigits = (digitsToEdit) => {
+
+    digitsToEdit.addEventListener("click", () => {
+        if(!flagValue){
+            numbers = digitsToEdit.innerText;
+            digitsToEdit.innerText = "";
+            inputEdit = document.createElement("input");
+            inputEdit.id = "inputDigits";
+            inputEdit.setAttribute("value", numbers);
+            inputEdit.type = "number";
+            inputEdit.setAttribute("min", 1);
+            inputEdit.setAttribute("max", 0);
+            digitsToEdit.append(inputEdit);
+        }
+    
+        let inputDigits = document.getElementById("inputDigits");
+    
+        inputDigits.addEventListener("focus", () => {
+            flagValue = true;
+        });
+    
+        inputDigits.addEventListener("blur", (e) => {
+            numbers = convertTwoDigits(e.target.value);
+            inputDigits.remove();
+            digitsToEdit.innerHTML = `${numbers}`;
+            if(digitsToEdit === outputTens){
+                tens = numbers;
+            }
+            else if(digitsToEdit === outputSeconds){
+                seconds = numbers;
+            }
+            else if(digitsToEdit === outputMinutes){
+                minutes = numbers;
+            }
+            flagValue = false;
+        });
+    });
+
+};
+
+editDigits(outputTens);
+editDigits(outputSeconds);
+editDigits(outputMinutes);
+
 modeCounter.checked = true;
 buttonTimer.disabled = true;
 
@@ -136,12 +186,11 @@ const mainEvaluator = (signal, mode) => {
     
     if(tensValue <= 9){
         outputTens.innerHTML = prefix + tensValue;
-        console.log("A");
     }
     if(tensValue > 9){
         outputTens.innerHTML = prefix2 + tensValue;
-        console.log("B");
     }
+    // counter mode or chronometer mode
     if(mode === "counter" || mode === "chronometer"){
         if(tensValue > 99){
             tens = 0;
@@ -155,13 +204,13 @@ const mainEvaluator = (signal, mode) => {
                 secondsValue = toPositive(seconds);
             }
             outputSeconds.innerHTML = prefix + secondsValue;
-            console.log("C");
         }
     }
-    // Timer
+    // Timer mode
     else{
         if(tensValue === 0){
             if(seconds === 0 && minutes === 0){
+                buttonReset.disabled = true;
                 buttonTimer.textContent = "Temporizador ok";
                 html.style.background = null;
                 html.classList.add("blink");
@@ -184,12 +233,10 @@ const mainEvaluator = (signal, mode) => {
                 }
             }
             outputSeconds.innerHTML = prefix + secondsValue;
-            console.log("C");
         }
     }
     if(secondsValue > 9){
         outputSeconds.innerHTML = prefix2 + secondsValue;
-        console.log("D");
     }
     if(secondsValue > 59){
         seconds = 0;
@@ -203,15 +250,12 @@ const mainEvaluator = (signal, mode) => {
             minutesValue = toPositive(minutes);
         }
         outputMinutes.innerHTML = prefix + minutesValue;
-        console.log("E");
     }
     if(minutesValue > 9){
         outputMinutes.innerHTML = prefix2 + minutesValue;
-        console.log("F");
     }
     if(minutesValue > 59){
         resetValues();
-        console.log("G");
     }
 };
     
@@ -307,7 +351,9 @@ buttonTimer.addEventListener('click', () => {
     else if(buttonTimer.textContent === "Temporizador ok"){
         html.classList.remove("blink");
         html.style.background = "linear-gradient(to bottom, rgb(217, 18, 217), rgb(214, 52, 214), purple)";
-
+        buttonTimer.textContent = "Iniciar temporizador";
+        buttonTimer.disabled = true;
+        buttonReset.disabled = false;
     }
     else{
         buttonTimer.textContent = "Iniciar temporizador";
@@ -325,18 +371,3 @@ buttonReset.addEventListener('click', () => {
     buttonStopWatch.disabled = false;
     buttonTimer.disabled = true;
 });
-
-// function spanSwitch(e) {
-//   let txt = e.innerText;
-//   let element = document.getElementById('element');
-
-//   element.innerHTML = `<input onblur='spanReset(this)' value='${txt}' />`;
-//   document.getElementsByTagName('input')[0].focus();
-// }
-
-// function spanReset(e) {
-//     let txt = e.value;
-//     let element = document.getElementById('element');
-  
-//     element.innerHTML = `<span onclick='spanSwitch(this)'> ${txt} </span>`;
-//   }
